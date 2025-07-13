@@ -1,0 +1,16 @@
+fight_id,fighter1_id,fighter2_id,winner_id,win_method,win_round
+1,1,2,2,submission,4
+2,1,6,6,knockout,2
+3,6,7,7,submission,3
+4,3,5,3,decision,5
+5,4,8,8,decision,5
+6,9,10,9,decision,5
+7,2,7,2,submission,2
+8,3,4,3,knockout,3
+9,5,8,5,knockout,1
+10,9,6,9,decision,5
+11,10,6,10,decision,5
+12,1,7,7,submission,3
+13,2,6,2,submission,3
+14,3,8,3,knockout,2
+15,4,5,4,decision,5

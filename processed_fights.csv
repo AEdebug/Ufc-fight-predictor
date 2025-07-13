@@ -1,0 +1,16 @@
+fight_id,fighter1_id,fighter2_id,winner_id,win_method,win_round,fighter1_name,fighter2_name,winner_name,fighter1_won,win_method_decision,win_method_knockout,win_method_submission
+1,1,2,2,submission,4,Conor McGregor,Khabib Nurmagomedov,Khabib Nurmagomedov,0,False,False,True
+2,1,6,6,knockout,2,Conor McGregor,Dustin Poirier,Dustin Poirier,0,False,True,False
+3,6,7,7,submission,3,Dustin Poirier,Charles Oliveira,Charles Oliveira,0,False,False,True
+4,3,5,3,decision,5,Jon Jones,Francis Ngannou,Jon Jones,1,True,False,False
+5,4,8,8,decision,5,Israel Adesanya,Kamaru Usman,Kamaru Usman,0,True,False,False
+6,9,10,9,decision,5,Alexander Volkanovski,Max Holloway,Alexander Volkanovski,1,True,False,False
+7,2,7,2,submission,2,Khabib Nurmagomedov,Charles Oliveira,Khabib Nurmagomedov,1,False,False,True
+8,3,4,3,knockout,3,Jon Jones,Israel Adesanya,Jon Jones,1,False,True,False
+9,5,8,5,knockout,1,Francis Ngannou,Kamaru Usman,Francis Ngannou,1,False,True,False
+10,9,6,9,decision,5,Alexander Volkanovski,Dustin Poirier,Alexander Volkanovski,1,True,False,False
+11,10,6,10,decision,5,Max Holloway,Dustin Poirier,Max Holloway,1,True,False,False
+12,1,7,7,submission,3,Conor McGregor,Charles Oliveira,Charles Oliveira,0,False,False,True
+13,2,6,2,submission,3,Khabib Nurmagomedov,Dustin Poirier,Khabib Nurmagomedov,1,False,False,True
+14,3,8,3,knockout,2,Jon Jones,Kamaru Usman,Jon Jones,1,False,True,False
+15,4,5,4,decision,5,Israel Adesanya,Francis Ngannou,Israel Adesanya,1,True,False,False

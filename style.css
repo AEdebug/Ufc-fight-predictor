@@ -1,0 +1,74 @@
+.fight-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.fighter-container {
+    text-align: center;
+    background: #2c3e50;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 300px;
+}
+
+.fighter-select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 1px solid #34495e;
+    background: #34495e;
+    color: white;
+}
+
+.fighter-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 1rem 0;
+    object-fit: cover;
+}
+
+.fighter-info {
+    color: white;
+}
+
+.vs-container {
+    font-size: 2rem;
+    color: #3498db;
+}
+
+.predict-button {
+    display: block;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.prediction-result {
+    background: #2c3e50;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    color: white;
+}
+
+.prediction-details {
+    margin-top: 1rem;
+}
+
+.prediction-details p {
+    margin: 0.5rem 0;
+}
+
+.prediction-details strong {
+    color: #3498db;
+}
