@@ -2,9 +2,9 @@
   "build": {
     "env": {
       "PYTHON_VERSION": "3.9"
-    },
-    "buildCommand": "python src/model_training.py"
+    }
   },
+  "buildCommand": "python src/model_training.py",
   "routes": [
     {
       "src": "/(.*)",
