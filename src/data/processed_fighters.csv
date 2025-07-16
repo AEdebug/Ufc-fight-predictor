@@ -1,0 +1,11 @@
+fighter_id,name,height,weight,reach,age,stance_orthodox,stance_southpaw,weight_class_featherweight,weight_class_heavyweight,weight_class_light_heavyweight,weight_class_lightweight,weight_class_middleweight,weight_class_welterweight
+1,Conor McGregor,1.75,70.3,1.88,33,False,True,False,False,False,True,False,False
+2,Khabib Nurmagomedov,1.78,70.3,1.78,33,True,False,False,False,False,True,False,False
+3,Jon Jones,1.93,93.0,2.15,34,True,False,False,False,True,False,False,False
+4,Israel Adesanya,1.93,84.0,2.03,32,True,False,False,False,False,False,True,False
+5,Francis Ngannou,1.93,117.0,2.03,35,True,False,False,True,False,False,False,False
+6,Dustin Poirier,1.75,70.3,1.83,33,False,True,False,False,False,True,False,False
+7,Charles Oliveira,1.78,70.3,1.85,32,True,False,False,False,False,True,False,False
+8,Kamaru Usman,1.83,77.1,1.93,34,True,False,False,False,False,False,False,True
+9,Alexander Volkanovski,1.68,65.8,1.82,33,True,False,True,False,False,False,False,False
+10,Max Holloway,1.8,65.8,1.82,30,True,False,True,False,False,False,False,False

@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="color: red; text-align: center; font-size: 3em;">UFC FIGHT PREDICTOR</h1>
+    <div class="fight-card">
+        <!-- Fighter 1 Container -->
+        <div class="fighter-container">
+            <select class="fighter-select" id="fighter1-select"></select>
+            <div class="fighter-info">
+                <h2 class="fighter-name" id="fighter1-name">Select Fighter 1</h2>
+            </div>
+        </div>
+
+        <!-- VS Container -->
+        <div class="vs-container">
+            VS
+        </div>
+
+        <!-- Fighter 2 Container -->
+        <div class="fighter-container">
+            <select class="fighter-select" id="fighter2-select"></select>
+            <div class="fighter-info">
+                <h2 class="fighter-name" id="fighter2-name">Select Fighter 2</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction Button -->
+    <button class="predict-button" onclick="predictFight()">Predict Fight</button>
+
+    <!-- Prediction Result -->
+    <div id="prediction-result" class="prediction-result" style="display: none;">
+        <h2>Prediction Result</h2>
+        <div class="prediction-details">
+            <p><strong>Winner:</strong> <span id="winner"></span></p>
+            <p><strong>Method:</strong> <span id="method"></span></p>
+            <p><strong>Round:</strong> <span id="round"></span></p>
+            <p><strong>Confidence:</strong> <span id="confidence"></span>%</p>
+        </div>
+    </div>
+
+    <!-- Add script tag before endblock -->
+    <script>
+        let allFightersData = {}; // To store fighter data globally within the script
+
+        // Function to update fighter info when selection changes
+        function updateFighterInfo(fighterNumber) {
+            const select = document.getElementById(`fighter${fighterNumber}-select`);
+            const fighterName = select.value;
+            
+            const container = select.parentElement;
+            const nameDisplay = container.querySelector('.fighter-name');
+            // const fighterImage = container.querySelector('.fighter-image'); // REMOVED
+            
+            if (fighterName) {
+                const fighterData = allFightersData[fighterName];
+                if (fighterData) {
+                    nameDisplay.textContent = fighterName;
+                    // fighterImage.src = fighterData.image_path; // REMOVED
+                    // console.log(`Setting fighter image src to: ${fighterData.image_path}`); // REMOVED
+                } else {
+                    nameDisplay.textContent = `Select Fighter ${fighterNumber}`;
+                    // fighterImage.src = 'static/images/default_fighter.jpg'; // REMOVED
+                }
+            } else {
+                nameDisplay.textContent = `Select Fighter ${fighterNumber}`;
+                // fighterImage.src = 'static/images/default_fighter.jpg'; // REMOVED
+            }
+            
+            // Log for debugging
+            console.log(`Updated fighter ${fighterNumber} to: ${fighterName}`);
+        }
+
+        // Function to handle prediction
+        function predictFight() {
+            // Get select elements
+            const fighter1Select = document.getElementById('fighter1-select');
+            const fighter2Select = document.getElementById('fighter2-select');
+            
+            // Check if elements exist
+            if (!fighter1Select || !fighter2Select) {
+                console.error('Select elements not found');
+                alert('Error: Fighter select elements not found. Please refresh the page.');
+                return;
+            }
+            
+            // Get selected values
+            const fighter1 = fighter1Select.value;
+            const fighter2 = fighter2Select.value;
+            
+            // Validate selections
+            if (!fighter1 || !fighter2) {
+                alert('Please select both fighters');
+                return;
+            }
+            
+            if (fighter1 === fighter2) {
+                alert('Please select two different fighters');
+                return;
+            }
+            
+            // Show loading state
+            const resultDiv = document.getElementById('prediction-result');
+            if (resultDiv) {
+                resultDiv.style.display = 'block';
+                document.getElementById('winner').textContent = 'Loading...';
+                document.getElementById('method').textContent = 'Loading...';
+                document.getElementById('round').textContent = 'Loading...';
+                document.getElementById('confidence').textContent = 'Loading...';
+            }
+            
+            console.log('Sending prediction request with:', {
+                fighter1: fighter1,
+                fighter2: fighter2
+            });
+            
+            // First check if the server is running
+            fetch('/predict', {
+                method: 'OPTIONS',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors',
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server check failed: ${response.status}`);
+                }
+                
+                // Create request body
+                const requestBody = JSON.stringify({
+                    fighter1: fighter1,
+                    fighter2: fighter2
+                });
+                
+                console.log('Sending request body:', requestBody);
+                console.log('Request body type:', typeof requestBody);
+                console.log('Request body length:', requestBody.length);
+                
+                return fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors',
+                    credentials: 'same-origin',
+                    body: requestBody
+                });
+            })
+            .then(response => {
+                console.log('Full response:', response);
+                console.log('Response status:', response.status);
+                console.log('Response status text:', response.statusText);
+                console.log('Response headers:', Array.from(response.headers.entries()));
+                console.log('Request URL:', window.location.origin + '/predict');
+                console.log('Request method:', 'POST');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error!\nStatus: ${response.status}\nStatus Text: ${response.statusText}\nHeaders: ${JSON.stringify(Array.from(response.headers.entries()), null, 2)}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Prediction result:', data);
+                if (data.error) {
+                    console.error('Prediction error:', data.error);
+                    console.error('Error details:', data.details);
+                    console.error('Received data:', data);
+                    console.error('Available fighters:', data.available_fighters);
+                    console.error('Request body:', requestBody);
+                    
+                    // Add more detailed error information
+                    const errorInfo = {
+                        error: data.error,
+                        details: data.details,
+                        data: data,
+                        available_fighters: data.available_fighters,
+                        request_body: requestBody
+                    };
+                    
+                    console.error('Detailed error info:', errorInfo);
+                    
+                    alert(`Prediction error:\n\n${data.error}\n\nDetails:\n${data.details}\n\nError data:\n${JSON.stringify(data, null, 2)}\n\nAvailable fighters:\n${data.available_fighters ? data.available_fighters.join(', ') : 'None'}`);
+                    return;
+                }
+                
+                document.getElementById('winner').textContent = data.winner;
+                document.getElementById('method').textContent = data.method;
+                document.getElementById('round').textContent = data.round;
+                document.getElementById('confidence').textContent = data.confidence.toFixed(2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while predicting the fight:\n\n' + 
+                      error.message + '\n\n' +
+                      'Please check the browser console for more details');
+            });
+        }
+
+        // Initialize fighter selectors
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const fightersData = JSON.parse('{{ fighters | tojson | safe }}');
+                console.log('Fighters data from Flask:', fightersData); 
+                
+                // Populate allFightersData for easy lookup
+                fightersData.forEach(fighter => {
+                    allFightersData[fighter.name] = fighter;
+                });
+                console.log('All Fighters Data (JS object):', allFightersData);
+
+                // Get existing fighter selectors
+                const fighter1Select = document.getElementById('fighter1-select');
+                const fighter2Select = document.getElementById('fighter2-select');
+                
+                // Add default "Select Fighter" option to prevent empty selection
+                const defaultOption1 = document.createElement('option');
+                defaultOption1.value = '';
+                defaultOption1.textContent = 'Select Fighter 1';
+                fighter1Select.appendChild(defaultOption1);
+
+                const defaultOption2 = document.createElement('option');
+                defaultOption2.value = '';
+                defaultOption2.textContent = 'Select Fighter 2';
+                fighter2Select.appendChild(defaultOption2);
+
+                // Add options to both selectors
+                fightersData.forEach(fighter => {
+                    const option = document.createElement('option');
+                    option.value = fighter.name;
+                    option.textContent = fighter.name;
+                    // Store image_path as a data attribute on the option
+                    option.dataset.imagePath = fighter.image_path; 
+                    fighter1Select.appendChild(option.cloneNode(true));
+                    fighter2Select.appendChild(option.cloneNode(true));
+                });
+                
+                // Add event listeners
+                fighter1Select.addEventListener('change', () => updateFighterInfo(1));
+                fighter2Select.addEventListener('change', () => updateFighterInfo(2));
+                
+                // REMOVED: No longer dynamically creating/prepending selectors
+                // document.querySelector('.fighter-container:first-child').prepend(fighter1Select);
+                // document.querySelector('.fighter-container:last-child').prepend(fighter2Select);
+                
+                // Initial update to display default names
+                updateFighterInfo(1);
+                updateFighterInfo(2);
+
+                // Log for debugging
+                console.log('Selectors initialized');
+                console.log('Fighter 1 select:', fighter1Select);
+                console.log('Fighter 2 select:', fighter2Select);
+            } catch (error) {
+                console.error('Error initializing selectors:', error);
+            }
+        });
+    </script>
+{% endblock %}
